@@ -1,0 +1,15 @@
+*.pyc
+log/*.log
+tmp/**/*
+.DS_Store
+*~
+*#
+.#*
+tmp/
+._.DS_Store
+
+*.swp
+data/pic/*
+test/*
+temp/*
+log/*
