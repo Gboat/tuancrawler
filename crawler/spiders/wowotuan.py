@@ -17,18 +17,22 @@ class Spider(CrawlSpider):
     '''
     name = 'wowotuan'
     start_urls =[
-            'http://weihai.55tuan.com/meishi',
+            #'http://weihai.55tuan.com/meishi',
+            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-1',
             ]
     def parse(self,response):
         items = []
         hxs = HtmlXPathSelector(response)
-        for url in list(set(hxs.selector("//a").re(".*store.*"))):
-            yield Request(url,callback=parse)
-
         if re.match(ur".*store.*",response.url):
             items += parse_store(response)
         elif re.match(ur".*goods.*",response.url):
             items += parse_goods(response)
+        else :
+            for url in list(set(hxs.select("//a/@href").re(".*store.*"))):
+                yield Request(url,callback=self.parse)
+
+            for url in list(set(hxs.select("//a/@href").re(".*goods.*"))):
+                yield Request(url,callback=self.parse)
 
         for item in items:
             yield self.return_item(item)
@@ -37,12 +41,29 @@ class Spider(CrawlSpider):
         return item
 
 def parse_store(response):
+    items = []
+    hxs = HtmlXPathSelector(response)
+
     item = StoreItem()
+    item['store'] = ""
+    item['market'] = ""
+    item['name'] = ""
+    item['place'] = ""
+    item['desc'] = ""
+
+    items.append(item)
+    return items
+
+def parse_goods(response):
+    items = []
     hxs = HtmlXPathSelector(response)
 
-    return item
-
-def parse_goods():
     item = TuanItem()
-    hxs = HtmlXPathSelector(response)
-    return item
+    item['title'] = "" 
+    item['content'] = ""
+    item['market'] = ""
+    item['store'] = ""
+    item['date'] = ""
+
+    items.append(item)
+    return items

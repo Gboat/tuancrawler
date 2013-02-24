@@ -9,16 +9,17 @@ class TuanItem(Item):
     title = Field()
     price = Field()
     content = Field()
-    place = Field()
     store = Field()
+
     def __str__(self):
         return ("TuanItem:%s"%(self['title']))
 
- 
 class StoreItem(Item):
+    market = Field()
+    store = Field()
     name = Field()
     desc = Field()
+    place = Field()
+
     def __str__(self):
         return ("StoreItem:%s"%(self['name']))
-
- 

@@ -7,7 +7,7 @@ BOT_NAME = 'tuancrawler'
 SPIDER_MODULES = ['crawler.spiders']
 NEWSPIDER_MODULE = 'crawler.spiders'
 
-USER_AGENT = ''
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/11.10 Chromium/18.0.1025.168 Chrome/18.0.1025.168 Safari/535.19'
 USER_AGENT_LIST = [
     "Googlebot/2.1 (+http://www.google.com/bot.html)",
     "Googlebot/2.2 (+http://www.google.com/bot.html)",
