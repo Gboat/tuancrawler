@@ -3,6 +3,7 @@
 import re
 import urlparse
 import json
+import requests
 from md5 import md5
 
 from scrapy.contrib.spiders import CrawlSpider, Rule
@@ -29,11 +30,11 @@ class Spider(CrawlSpider):
         elif re.match(ur".*goods.*",response.url):
             items += parse_goods(response)
         else :
+            pass
             #for url in list(set(hxs.select("//a/@href").re(".*store.*"))):
                 #yield Request(url,callback=self.parse)
-
-            for url in list(set(hxs.select("//a/@href").re(".*goods.*"))):
-                yield Request(url,callback=self.parse)
+        for url in list(set(hxs.select("//a/@href").re("/goods.*\.html"))):
+            yield Request("http://weihai.55tuan.com"+url,callback=self.parse)
 
         for item in items:
             yield self.return_item(item)
@@ -76,18 +77,15 @@ def parse_store(response):
 def parse_goods(response):
     items = []
     hxs = HtmlXPathSelector(response)
-    goods_id = ""
-    city_id = "123"
     #url = "http://shop.55tuan.com/s/getShopsByGoodsId.do?cityId=123&goodsId=47f52e8676655d97&type=shoplist"
     url = hxs.select("//input[@id=\"baiduDataurl\"]/@value").extract()[0]
-
-    data = json.loads(requests.get(url))[0]
-    
+    data = json.loads(requests.get(url).text)[0]
 
     item = TuanItem()
-    item['title'] =  hxs.select("//p[@class=\"title\"]/text()").extract()[0] 
-    item['content'] = hxs.select("//div[@id=\"goodsAll_info_div\"]/text()").extract()[0]
     item['market'] = "wowotuan"
+    item['goodsid'] = re.findall(ur"goods-.*\.",response.url)[0][6:-1:]
+    item['title'] =  hxs.select("//p[@class=\"title\"]/text()").extract()[0] 
+    item['content'] = hxs.select("//textarea[@id=\"goodsAll_info\"]").extract()[0]
     item['price'] = hxs.select("//em[@class=\"xq_boem xq_boem1\"]/text()").extract()[0]
     item['lon'] = data.get("lon","")
     item['lat'] = data.get("lat","")
@@ -95,6 +93,7 @@ def parse_goods(response):
     items.append(item)
 
     item = StoreItem()
+    item['market'] = "wowotuan"
     item['store'] = data.get('shopId','')
     item['addr'] = data.get('addr','')
     item['name'] = data.get('shopName','')
@@ -105,7 +104,6 @@ def parse_goods(response):
     item['localShopTotal'] = data.get('localShopTotal','')
     item['city'] = data.get('cityName','')
     item['businessHours'] = data.get('businessHours','')
-    item['market'] = "wowotuan"
 
     items.append(item)
 

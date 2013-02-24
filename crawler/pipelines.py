@@ -9,9 +9,6 @@ class mongo_storage(object):
         connection = pymongo.Connection(MONGODB['host'],MONGODB['port'])
         self.db = connection[MONGODB['name']]
         self.date = datetime.now().strftime("%Y-%m-%d")
-    def create_index(self):
-        db.appmeta.ensure_index({"md5":1},name="appmeta_key")
-        db.marketmeta.ensure_index({"marketmeta":1},name="appmeta_key")
                                      
     def process_item(self, item, spider):
         if 'TuanItem' == item.__class__.__name__:
@@ -21,8 +18,11 @@ class mongo_storage(object):
         else:
             raise DropItem("Unknown Item Type !!!")
         return item
+
     def process_tuan_item(self,item):
-        pass
+        if self.db.tuan.find({"goodsid":item['goodsid'],"market":item['market']}).count() is 0:
+            self.db.tuan.insert(dict(item))
 
     def process_store_item(self,item):
-        pass
+        if self.db.store.find({"lon":item['lon'],"lat":item['lat']}).count() is 0:
+            self.db.store.insert(dict(item))

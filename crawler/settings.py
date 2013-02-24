@@ -28,8 +28,8 @@ DOWNLOADER_MIDDLEWARES = {
 REDIRECT_ENABLED = False
 REDIRECT_MAX_TIMES =0 
 
-MONGODB = {'host':'localhost','port':27017,'name':'test'}
-MYSQLDB = {'host':'localhost','port':27017,'name':'test','user':'root','pwd':'root'}
+MONGODB = {'host':'localhost','port':27017,'name':'chidian'}
+MYSQLDB = {'host':'localhost','port':27017,'name':'chidian','user':'root','pwd':'root'}
 
 MAIL_DEBUG = False
 MAIL_HOST = 'mail.google.com'

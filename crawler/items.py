@@ -4,12 +4,15 @@ from scrapy.item import Item, Field
 class CrawlerItem(Item):
     pass
 class TuanItem(Item):
+    goodsid = Field()
     date = Field()
     market = Field()
     title = Field()
     price = Field()
     content = Field()
-    store = Field()
+    lon = Field()
+    lat = Field()
+
 
     def __str__(self):
         return ("TuanItem:%s"%(self['title']))
@@ -19,7 +22,14 @@ class StoreItem(Item):
     store = Field()
     name = Field()
     desc = Field()
-    place = Field()
+    addr = Field()
+    traffic = Field()
+    phone = Field()
+    localShopTotal = Field()
+    businessHours = Field()
+    city = Field()
+    lon = Field()
+    lat = Field()
 
     def __str__(self):
         return ("StoreItem:%s"%(self['name']))
