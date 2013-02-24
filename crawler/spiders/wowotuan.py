@@ -20,7 +20,10 @@ class Spider(CrawlSpider):
     name = 'wowotuan'
     start_urls =[
             #'http://weihai.55tuan.com/meishi',
-            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-1',
+            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-2',
+            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-2',
+            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-2',
+            'http://weihai.55tuan.com/meishi-0-0-0-0-0-0-2',
             ]
     def parse(self,response):
         items = []
@@ -30,11 +33,10 @@ class Spider(CrawlSpider):
         elif re.match(ur".*goods.*",response.url):
             items += parse_goods(response)
         else :
-            pass
             #for url in list(set(hxs.select("//a/@href").re(".*store.*"))):
                 #yield Request(url,callback=self.parse)
-        for url in list(set(hxs.select("//a/@href").re("/goods.*\.html"))):
-            yield Request("http://weihai.55tuan.com"+url,callback=self.parse)
+            for url in list(set(hxs.select("//a/@href").re("/goods.*\.html"))):
+                yield Request("http://weihai.55tuan.com"+url,callback=self.parse)
 
         for item in items:
             yield self.return_item(item)
